@@ -1,4 +1,4 @@
-from queue import Queue
+from asyncio.queues import Queue
 from typing import Union
 import discord
 import asyncio
@@ -54,15 +54,16 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class Disco(Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.music_queue: Queue[str] = Queue(maxsize=50)
-        self.loop = asyncio.get_event_loop()
+        self.music_queue: Queue[YTDLSource] = Queue(maxsize=50)
         self.ctx: Union[None, Context] = None
+        self.bot.loop.set_debug(True)
         self.bot.loop.create_task(self.play_music_from_queue())
+        self.play_next_player = asyncio.Event()
 
     @staticmethod
     def _create_music_queue_resp(player, initial="queued ") -> str:
         resp: str = initial
-        resp = f"{player.title}"
+        resp += f"{player.title}"
         if artist := player.data["artist"]:
             resp += f" by {artist}"
         if album := player.data["album"]:
@@ -72,50 +73,62 @@ class Disco(Cog):
         return resp
 
     def _voice_client_after_handler(self, error):
+        print("in after handle", self.music_queue)
         if error:
             print(f"player error {error}")
             return
         print("done with an item")
-        self.music_queue.task_done()
+        # self.music_queue.task_done()
+        self.bot.loop.call_soon_threadsafe(self.play_next_player.set)
 
     async def play_music_from_queue(self):
         print("executed this dude")
         while True:
-            url = self.music_queue.get()
-            print(f"got {url}")
+            player = await self.music_queue.get()
+            print(f"got {player}")
             await self.join_channel()
-            player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
             resp = self._create_music_queue_resp(player, initial="now playing ")
             await self.ctx.send(resp)
+            self.play_next_player.clear()
             self.ctx.voice_client.play(player, after=self._voice_client_after_handler)
+            await self.play_next_player.wait()
 
     async def join_channel(self):
         channel = self.ctx.author.voice.channel  # type: ignore
         if self.ctx.voice_client is not None:
             return await self.ctx.voice_client.move_to(channel)
-        await channel.channel.connect()
+        await channel.connect()
 
     @command(aliases=["p"])
     async def play(self, ctx: Context, url: str):
         print("queue size", self.music_queue.qsize())
         if self.music_queue.full():
             return await ctx.send(
-                "i cant hold anymore tracks right now, play a few and then give me some more"
+                "i cant hold anymore tracks right now, let a few play and then give me some more"
             )
         self.ctx = ctx
         resp: str
         async with ctx.typing():
-            self.music_queue.put(url)
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
             resp = self._create_music_queue_resp(player)
+            await self.music_queue.put(player)
         await ctx.send(resp)
 
+    @command()
+    async def skip(self, ctx: Context):
+        if self.music_queue.empty():
+            return await ctx.send("nothing to skip")
 
-# join a voice channel
-# turn on bot "voice"
-# find the video
-# stream the video
+    @command()
+    async def pause(self, ctx: Context):
+        if ctx.voice_client.is_playing():
+            ctx.voice_client.pause()
+
+    @command()
+    async def resume(self, ctx: Context):
+        if not ctx.voice_client.is_playing():
+            ctx.voice_client.resume()
 
 
 bot.add_cog(Disco(bot))
-bot.run("Nzk3NTQ0MzMxMTMyMjcyNjYw.X_oBCg.LheOBSPBlrIr8KR0TqY7wNMeDdI")
+bot.run("token")
