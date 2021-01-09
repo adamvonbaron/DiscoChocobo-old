@@ -1,6 +1,6 @@
 # disco
 
-a cool discord bot written in (discord.py)[https://discordpy.readthedocs.io/]
+a cool discord bot written in [discord.py](https://discordpy.readthedocs.io/)
 
 # how to use
 
