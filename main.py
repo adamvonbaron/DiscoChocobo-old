@@ -2,7 +2,7 @@ from os import getenv
 from discord.ext import commands
 from music import MusicCog
 
-DISCORD_API_TOKEN = getenv("DISCORD_AUTH_TOKEN")
+DISCORD_API_TOKEN = getenv("DISCORD_API_TOKEN")
 if DISCORD_API_TOKEN is None:
     raise Exception("no DISCORD_API_TOKEN set")
 

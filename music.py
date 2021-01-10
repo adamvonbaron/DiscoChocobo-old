@@ -4,7 +4,7 @@ import youtube_dl
 from discord.ext import commands
 from asyncio.queues import Queue
 from typing import Union
-from pprint import pprint
+from utils import validate_youtube_url
 
 ytdl_opts = {
     "format": "bestaudio/best",
@@ -40,8 +40,6 @@ class YTDLSource(discord.PCMVolumeTransformer):
             None, lambda: ytdl.extract_info(url, download=not stream)
         )
 
-        # pprint(data)
-
         if "entries" in data:
             data = data["entries"][0]
 
@@ -71,19 +69,15 @@ class MusicCog(commands.Cog):
         return resp
 
     def _voice_client_after_handler(self, error):
-        print("in after handle", self.music_queue)
         if error:
             print(f"player error {error}")
             return
-        print("done with an item")
-        # self.music_queue.task_done()
+        self.music_queue.task_done()
         self.bot.loop.call_soon_threadsafe(self.play_next_player.set)
 
     async def play_music_from_queue(self):
-        print("executed this dude")
         while True:
             player = await self.music_queue.get()
-            print(f"got {player}")
             await self.join_channel()
             resp = self._create_music_queue_resp(player, initial="now playing ")
             await self.ctx.send(resp)
@@ -99,11 +93,12 @@ class MusicCog(commands.Cog):
 
     @commands.command(aliases=["p"])
     async def play(self, ctx: commands.Context, url: str):
-        print("queue size", self.music_queue.qsize())
         if self.music_queue.full():
             return await ctx.send(
                 "i cant hold anymore tracks right now, let a few play and then give me some more"
             )
+        if not validate_youtube_url(url):
+            return await ctx.send("not sure how to play that one...")
         self.ctx = ctx
         resp: str
         async with ctx.typing():
@@ -114,8 +109,10 @@ class MusicCog(commands.Cog):
 
     @commands.command()
     async def skip(self, ctx: commands.Context):
-        if self.music_queue.empty():
+        if self.music_queue.empty() and not ctx.voice_client.is_playing():
             return await ctx.send("nothing to skip")
+        ctx.voice_client.stop()
+        self.play_next_player.set()
 
     @commands.command()
     async def pause(self, ctx: commands.Context):
