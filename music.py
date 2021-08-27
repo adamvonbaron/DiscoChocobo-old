@@ -18,6 +18,9 @@ ytdl_opts = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",  # bind to ipv4 since ipv6 addresses cause issues sometimes
+    "reconnect": 1,
+    "reconnect_streamed": 1,
+    "reconnect_delay_max": 5
 }
 
 ffmpeg_opts = {"options": "-vn"}
@@ -60,11 +63,11 @@ class MusicCog(commands.Cog):
     def _create_music_queue_resp(player, initial="queued ") -> str:
         resp: str = initial
         resp += f"{player.title}"
-        if player.data["artist"]:
+        if "artist" in player.data:
             resp += f" by {player.data['artist']}"
-        if player.data["album"]:
+        if "album" in player.data:
             resp += f" from {player.data['album']}"
-        if player.data["release_year"]:
+        if "release_year" in player.data:
             resp += f", released {player.data['release_year']}"
         return resp
 
