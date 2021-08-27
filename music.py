@@ -60,12 +60,12 @@ class MusicCog(commands.Cog):
     def _create_music_queue_resp(player, initial="queued ") -> str:
         resp: str = initial
         resp += f"{player.title}"
-        if artist := player.data["artist"]:
-            resp += f" by {artist}"
-        if album := player.data["album"]:
-            resp += f" from {album}"
-        if release_year := player.data["release_year"]:
-            resp += f", released {release_year}"
+        if player.data["artist"]:
+            resp += f" by {player.data['artist']}"
+        if player.data["album"]:
+            resp += f" from {player.data['album']}"
+        if player.data["release_year"]:
+            resp += f", released {player.data['release_year']}"
         return resp
 
     def _voice_client_after_handler(self, error):
