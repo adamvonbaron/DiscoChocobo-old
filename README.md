@@ -4,6 +4,7 @@ a cool discord bot written in [discord.py](https://discordpy.readthedocs.io/)
 
 # how to use
 
+- install the version of python specified in [`.python-version`](https://raw.githubusercontent.com/adamvonbaron/DiscoChocobo/master/.python-version)
 - clone this repo and create a .env file in its directory
 - set DISCORD_API_TOKEN equal to your bot's client secret
 - run `python main.py`
