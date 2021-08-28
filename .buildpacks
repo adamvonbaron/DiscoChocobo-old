@@ -1,0 +1,4 @@
+https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
+https://github.com/ytdl-org/youtube-dl.git
+https://github.com/HashNuke/heroku-buildpack-elixir
+https://github.com/gigalixir/gigalixir-buildpack-distillery
