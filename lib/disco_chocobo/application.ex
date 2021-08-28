@@ -16,5 +16,6 @@ defmodule DiscoChocobo.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: DiscoChocobo.Supervisor]
     Supervisor.start_link(children, opts)
+    AudioPlayerSupervisor.start_link([])
   end
 end
