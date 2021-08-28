@@ -23,7 +23,6 @@ defmodule DiscoChocobo.MixProject do
   defp deps do
     [
       {:nostrum, "~> 0.4"},
-      {:dotenv, "~> 3.1", only: [:dev, :test]}
     ]
   end
 end

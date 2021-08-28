@@ -1,4 +1,3 @@
 import Config
 
-config :nostrum,
-  token: System.fetch_env!("DISCORD_API_TOKEN")
+import_config "#{Mix.env}.secret.exs"

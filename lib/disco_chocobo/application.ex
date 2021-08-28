@@ -7,9 +7,6 @@ defmodule DiscoChocobo.Application do
 
   @impl true
   def start(_type, _args) do
-    unless Mix.env == :prod do
-      Dotenv.load
-    end
     children = [
       # Starts a worker by calling: DiscoChocobo.Worker.start_link(arg)
       # {DiscoChocobo.Worker, arg}
