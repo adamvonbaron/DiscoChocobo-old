@@ -1,9 +1,11 @@
 %{
+  "artificery": {:hex, :artificery, "0.4.3", "0bc4260f988dcb9dda4b23f9fc3c6c8b99a6220a331534fdf5bf2fd0d4333b02", [:mix], [], "hexpm", "12e95333a30e20884e937abdbefa3e7f5e05609c2ba8cf37b33f000b9ffc0504"},
   "certifi": {:hex, :certifi, "2.6.1", "dbab8e5e155a0763eea978c913ca280a6b544bfa115633fa20249c3d396d9493", [:rebar3], [], "hexpm", "524c97b4991b3849dd5c17a631223896272c6b0af446778ba4675a1dff53bb7e"},
   "chacha20": {:hex, :chacha20, "1.0.3", "26372176993172260968b36b4e7bc2e007e6b2b397ae08083e4836df67cdf03c", [:mix], [], "hexpm", "27f23b680e63f04b5bced77a9d8867033b381c091f92d544de0ad93accfb7cec"},
   "cowlib": {:hex, :cowlib, "2.7.3", "a7ffcd0917e6d50b4d5fb28e9e2085a0ceb3c97dea310505f7460ff5ed764ce9", [:rebar3], [], "hexpm", "1e1a3d176d52daebbecbbcdfd27c27726076567905c2a9d7398c54da9d225761"},
   "curve25519": {:hex, :curve25519, "1.0.4", "e570561b832c29b3ce4fd8b9fcd9c9546916188860568f1c1fc9428d7cb00894", [:mix], [], "hexpm", "1a068bf9646e7067bf6aa5bf802b404002734e09bb5300f098109df03e31f9f5"},
   "dialyxir": {:hex, :dialyxir, "1.1.0", "c5aab0d6e71e5522e77beff7ba9e08f8e02bad90dfbeffae60eaf0cb47e29488", [:mix], [{:erlex, ">= 0.2.6", [hex: :erlex, repo: "hexpm", optional: false]}], "hexpm", "07ea8e49c45f15264ebe6d5b93799d4dd56a44036cf42d0ad9c960bc266c0b9a"},
+  "distillery": {:hex, :distillery, "2.1.1", "f9332afc2eec8a1a2b86f22429e068ef35f84a93ea1718265e740d90dd367814", [:mix], [{:artificery, "~> 0.2", [hex: :artificery, repo: "hexpm", optional: false]}], "hexpm", "bbc7008b0161a6f130d8d903b5b3232351fccc9c31a991f8fcbf2a12ace22995"},
   "docsh": {:hex, :docsh, "0.7.2", "f893d5317a0e14269dd7fe79cf95fb6b9ba23513da0480ec6e77c73221cae4f2", [:rebar3], [{:providers, "1.8.1", [hex: :providers, repo: "hexpm", optional: false]}], "hexpm", "4e7db461bb07540d2bc3d366b8513f0197712d0495bb85744f367d3815076134"},
   "dotenv": {:hex, :dotenv, "3.1.0", "d5a76bb17dc28acfb5236655bbe5776a1ffbdc8d3589fc992de0882b3ae4bc10", [:mix], [], "hexpm", "01bed84d21bedd8739aebad16489a3ce12d19c2d59af87377da65ebb361980d3"},
   "ed25519": {:hex, :ed25519, "1.3.2", "e3a2d4badf57f0799279cf09925bd761ec38df6df3696e266585626280b5c0ad", [:mix], [], "hexpm", "2290e46e0e23717adbe20632c6dd29aa71a46ca6e153ef7ba41fe1204f66f859"},
