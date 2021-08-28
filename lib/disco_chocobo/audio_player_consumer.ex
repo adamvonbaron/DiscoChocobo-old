@@ -34,7 +34,6 @@ defmodule AudioPlayerConsumer do
         end
       "!leave" -> Voice.leave_channel(msg.guild_id)
       "!play " <> url ->
-        IO.puts url
         if Voice.ready?(msg.guild_id) do
           Voice.play(msg.guild_id, url, :ytdl)
         else
