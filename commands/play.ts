@@ -1,8 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { Player } = require("discord-player");
 const { client } = require("../client.ts");
+const { player } = require("../player.ts");
 
-const player = new Player(client);
 
 module.exports = {
   data: new SlashCommandBuilder()
