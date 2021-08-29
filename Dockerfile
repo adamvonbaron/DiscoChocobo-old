@@ -1,13 +1,11 @@
-from elixir:1.12.2
+from node:16.8.0
 
 arg discord_api_token
-arg mix_env
 
-env MIX_ENV=$mix_env
 env DISCORD_API_TOKEN=$discord_api_token
 
-# need to have ffmpeg and youtube-dl to stream vids and stuff
-run apt update && apt install -y ffmpeg curl
+# need to have ffmpeg opus and youtube-dl to stream vids and stuff
+run apt update && apt install -y ffmpeg curl libopus0
 
 run curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 
@@ -17,9 +15,6 @@ run mkdir /app
 copy . /app
 workdir /app
 
-run mix local.hex --force
-run mix local.rebar --force
-run mix deps.get && mix deps.compile
-run mix release
+run yarn
 
-# cmd ["./_build/${MIX_ENV}/rel/discochocobo/bin/discochocobo", "start"]
+cmd ["yarn", "run", "bot"]
