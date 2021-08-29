@@ -1,39 +1,62 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { client } = require("../client.ts");
-const { player } = require("../player.ts");
+import {
+  CommandInteraction,
+  GuildMember,
+  Guild,
+  Message,
+  Constants
+} from "discord.js";
+import { APIMessage } from "discord-api-types/v9";
+import { player } from "../client";
+import { DiscoChocoboCommand } from "../command";
 
 
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("play audiooooooo")
-    .addStringOption(option => option.setName("url").setDescription("url of da audio").setRequired(true)),
-  async execute(interaction) {
-    const url = interaction.options.getString("url");
-    if (!interaction.member.voice.channelId) return await interaction.reply({ content: "You are not in a voice channel!", ephemeral: true });
-    if (interaction.guild.me.voice.channelId && interaction.member.voice.channelId !== interaction.guild.me.voice.channelId) return await interaction.reply({ content: "You are not in my voice channel!", ephemeral: true });
-    const queue = player.createQueue(interaction.guild, {
+export default class extends DiscoChocoboCommand {
+  name = "play";
+  description = "play audio";
+  options = [
+    {
+      name: "url_or_search",
+      description: "url or search string to audio",
+      required: true,
+      type: Constants.ApplicationCommandOptionTypes.STRING
+    } as any
+  ];
+
+  execute = async (interaction: CommandInteraction): Promise<Message | APIMessage | void> => {
+    const audioParam = interaction.options.getString("url_or_search") as string;
+    const member = interaction.member as GuildMember;
+    const guild = interaction.guild as Guild;
+
+    if (!member.voice.channelId)
+      return await interaction.reply({ content: "you need to be in a voice channel", ephemeral: true });
+
+    if ((guild.me as GuildMember).voice.channelId &&
+      member.voice.channelId !== (guild.me as GuildMember).voice.channelId)
+      return await interaction.reply({ content: "i am in a different channel right now", ephemeral: true });
+
+    const queue = player.createQueue(guild, {
       metadata: {
         channel: interaction.channel
       }
     });
 
-    // verify vc connection
     try {
-      if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+      if (!queue.connection)
+        await queue.connect(member.voice.channelId);
     } catch {
       queue.destroy();
-      return await interaction.reply({ content: "Could not join your voice channel!", ephemeral: true });
+      return await interaction.reply({ content: "error joining voice channel", ephemeral: true });
     }
 
     await interaction.deferReply();
-    const track = await player.search(url, {
+
+    const track = await player.search(audioParam, {
       requestedBy: interaction.user
     }).then(x => x.tracks[0]);
-    if (!track) return await interaction.followUp({ content: `❌ | Track **${query}** not found!` });
 
+    if (!track)
+      return await interaction.followUp({ content: `track **${audioParam}** not found` });
     queue.play(track);
-
-    return await interaction.followUp({ content: `⏱️ | Loading track **${track.title}**!` });
+    return await interaction.followUp({ content: `loading track **${track.title}**...` });
   }
 }

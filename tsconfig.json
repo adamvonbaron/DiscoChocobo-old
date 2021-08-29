@@ -8,6 +8,16 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_module/@types"
+    ]
+  },
+  "exclude": [ "node_module" ],
+  "include": ["./"]
+
 }
