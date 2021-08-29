@@ -17,6 +17,4 @@ workdir /app
 
 run yarn
 
-expose 443
-
 cmd ["yarn", "run", "bot"]
