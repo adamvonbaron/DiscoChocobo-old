@@ -1,4 +1,7 @@
-require("dotenv").config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const fs = require("fs");
 const { Client, Intents, Collection } = require("discord.js");
 const { REST } = require('@discordjs/rest');
