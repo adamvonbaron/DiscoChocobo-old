@@ -16,5 +16,3 @@ copy . /app
 workdir /app
 
 run yarn
-
-cmd ["yarn", "run", "bot"]
