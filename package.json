@@ -23,7 +23,6 @@
     "@discordjs/opus": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.6.0",
-    "@types/node": "^16.7.10",
     "bufferutil": "^4.0.3",
     "discord-api-types": "^0.22.0",
     "discord-player": "^5.1.0",
@@ -36,6 +35,7 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
+    "@types/node": "^16.7.10",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.3",
     "dotenv": "^10.0.0",
